@@ -1,0 +1,18 @@
+#root {
+  background-color: black;
+  color: aliceblue;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#page{
+  position: relative;
+  min-height: 100vh;
+}
+
+#content{
+  padding-bottom: 2.5rem;
+}
+

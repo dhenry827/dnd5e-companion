@@ -1,0 +1,14 @@
+#header{
+    position: absolute;
+    top: 1em;
+    width: 100vw;
+    
+}
+
+#headerImg{
+    height: 2em;
+}
+
+#navbar{
+     background-color: darkgray;
+}

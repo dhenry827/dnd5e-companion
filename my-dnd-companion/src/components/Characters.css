@@ -1,0 +1,34 @@
+#characterPageCont{
+    height: 80vh;
+    padding: 1.5em;
+}
+
+#controlsCont{
+    display: flex;
+    justify-content: flex-end;
+}
+
+#characterCont{
+    height: 95%;
+    border-style: inset;
+    border-radius: 3%;
+    background-color: lightgrey;
+
+
+}
+
+.characterSlide{
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.charAttribute{
+    margin-bottom: 0px;
+}
+
+#characterCreator{
+    position: absolute;
+    z-index: 1000;
+}

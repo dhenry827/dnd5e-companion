@@ -1,0 +1,14 @@
+#Footer{
+    height: 2.5rem;
+    position: absolute;
+    bottom: 0;
+    background-color: darkgray;
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#socialIcons{
+    width: 60%;
+}
