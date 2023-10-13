@@ -1,9 +1,11 @@
-import React from 'react'
-
+import React, { useState, useContext } from 'react'
+// import { StatDataContext } from './characterCreation/statPicker/PointBuy'
 
 const Statmods = () => {
 
-    function setMod(stat){
+    const {attribute, setAttribute} = useContext(StatDataContext)
+
+    function setMod(stat ){
         let statMod = Number
     if(stat == 1){
         statMod = -5
@@ -53,11 +55,13 @@ const Statmods = () => {
     if(stat == 30){
         statMod = 10
     }
-    }
 
-  return (
-    <div>Statmods</div>
-  )
+
+}
+
+
+
+  return null
 }
 
 export default Statmods

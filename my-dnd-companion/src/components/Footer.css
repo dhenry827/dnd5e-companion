@@ -9,6 +9,9 @@
     align-items: center;
 }
 
+
 #socialIcons{
-    width: 60%;
+    width: 10%;
+    display: flex;
+    justify-content: space-around;
 }

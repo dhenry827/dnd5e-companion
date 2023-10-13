@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Spell from './Spell'
+import Spell from '../../components/Spell'
 
 const Glossary_Spells = () => {
   const [spellName, setSpellName] = useState([])

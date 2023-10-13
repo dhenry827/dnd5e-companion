@@ -1,7 +1,7 @@
 import React from 'react'
 import Banner from './Banner'
 import NavBar from './NavBar'
-import './Header.css'
+import './stylesheets/Header.css'
 
 const Header = () => {
   return (

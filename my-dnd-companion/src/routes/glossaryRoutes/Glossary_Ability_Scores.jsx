@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Ability from './Ability'
-import './Glossary.css'
+import Ability from '../../components/Ability'
+import '../../stylesheets/Glossary.css'
 
 const Glossary_Ability_Scores = () => {
     const [abilityName, setAbilityName] = useState([])

@@ -16,3 +16,31 @@
   padding-bottom: 2.5rem;
 }
 
+.stat-Form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.solo-stats {
+  width: max-content !important;
+  flex: 1 1 120px;
+}
+
+.point-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+}
+
+.modal-footer {
+  justify-content: space-between;
+}
+
+
+

@@ -9,26 +9,6 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 const NavBar = () => {
   return (
     <div id='navbar'>
-      {/* <Link to='/'>Home</Link>
-      <Link to='/characters'>Characters</Link>
-      <Link to='/glossary/ability-scores'>Ability Scores</Link>
-      <Link to='/glossary/skills'>Skills</Link>
-      <div>
-        <Link to='/glossary/classes/barbarian'>Barbarian</Link>
-        <Link to='/glossary/classes/bard'>Bard</Link>
-        <Link to='/glossary/classes/cleric'>Cleric</Link>
-        <Link to='/glossary/classes/druid'>Druid</Link>
-        <Link to='/glossary/classes/fighter'>Fighter</Link>
-        <Link to='/glossary/classes/monk'>Monk</Link>
-        <Link to='/glossary/classes/paladin'>Paladin</Link>
-        <Link to='/glossary/classes/ranger'>Ranger</Link>
-        <Link to='/glossary/classes/rogue'>Rogue</Link>
-        <Link to='/glossary/classes/sorceror'>Sorceror</Link>
-        <Link to='/glossary/classes/warlock'>Warlock</Link>
-        <Link to='/glossary/classes/wizard'>Wizard</Link>
-        <Link to='/glossary/spells'>Spells</Link>
-      </div>
-      <Link to='/glossary/races'>Races</Link> */}
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand href="/">PalaDjinn</Navbar.Brand>

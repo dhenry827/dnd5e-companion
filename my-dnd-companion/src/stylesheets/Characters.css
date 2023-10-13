@@ -8,20 +8,29 @@
     justify-content: flex-end;
 }
 
+.charMngBtn{
+    margin: 10px;
+  }
+  
 #characterCont{
     height: 95%;
     border-style: inset;
     border-radius: 3%;
     background-color: lightgrey;
+    padding: 5px;
 
 
 }
 
-.characterSlide{
+.charCard{
     height: 10%;
     width: 100%;
+    background-color: darkgray;
+    border-radius: 25px / 15px;
     display: flex;
+    justify-content: space-around;
     align-items: center;
+    border-style: solid;
 }
 
 .charAttribute{

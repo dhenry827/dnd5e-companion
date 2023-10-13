@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from 'react'
-import Skill from './Skill'
+import Skill from '../../components/Skill'
 
 const Glossary_Skills = () => {
     const [skillName, setSkillName] = useState([])

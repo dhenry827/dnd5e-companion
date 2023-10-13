@@ -21,6 +21,7 @@ const RaceFetch = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log(data)
                 
                 setRaceData({
                     name: data.name,

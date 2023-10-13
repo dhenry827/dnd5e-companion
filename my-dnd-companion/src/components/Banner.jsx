@@ -1,10 +1,10 @@
 import React from 'react'
-import './Header.css'
+import '../stylesheets/Header.css'
 
 const Banner = () => {
   return (
     <div id='headerImg'>
-      <img src='#' alt='#' />
+      <img src='#' alt='#' /> {/* This is where the banner image for the header will go */}
     </div>
   )
 }
