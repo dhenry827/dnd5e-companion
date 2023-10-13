@@ -44,7 +44,7 @@ const Glossary_Races = () => {
           {raceTraits.map((trait, index) => {
             return(
               <li key={index}>
-                <a href={`http://localhost:5173/glossary/traits/${trait.index}`}>{trait.name}</a>
+                <a href={`https://dnd5e-companion.vercel.app/glossary/traits/${trait.index}`}>{trait.name}</a>
               </li>
             )
           })}

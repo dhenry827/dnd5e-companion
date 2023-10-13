@@ -27,12 +27,19 @@
     width: 100%;
     background-color: darkgray;
     border-radius: 25px / 15px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
     border-style: solid;
 }
 
+.charInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.charDelBtn{
+    display: flex;
+    border-radius: 15px / 13px;
+}
 .charAttribute{
     margin-bottom: 0px;
 }
