@@ -10,7 +10,7 @@ const RaceFetch = () => {
     const handleFetch = async () => {
         try {
             const response = await fetch(
-                `https://www.dnd5eapi.co/api/races/${selectedRace}`,
+                `https://www.dndd5eapi.co/api/races/${selectedRace}`,
                 {
                     method: 'GET',
                     headers: {

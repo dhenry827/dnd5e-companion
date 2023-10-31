@@ -53,9 +53,10 @@ const CharacterCreator = () => {
         name: '',
         speed: '',
         abilityBonuses: [],
+        proficiencies: [],
         size: '',
         languages: [],
-        traits: [],
+        traits: []
     });
 
 
@@ -103,7 +104,7 @@ const CharacterCreator = () => {
         spellCastingAbilityDesc: []
     });
 
-    
+
 
     const handleClassesFetch = async () => {
 
@@ -133,9 +134,9 @@ const CharacterCreator = () => {
         setCharClass(selectedClass)
     };
 
-    
 
-const {characters, setCharacters, handleClose} = useContext(CharacterDataContext)
+
+    const { characters, setCharacters, handleClose } = useContext(CharacterDataContext)
 
 
     const handleSubmit = (e) => {
@@ -153,22 +154,22 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
         handleClose()
     }
 
-        // name: '',
-        // alignment: '',
-        // ideals: '',
-        // bonds: '',
-        // flaws: '',
-        // race: '',
-        // size: '',
-        // traits: [],
-        // languages: [],
-        // class: '',
-        // proficiencies: [],
-        // spellCastingAbility: '',
-        // equipment: [],
-        // level: 1,
-        // experiece: 0
-     
+    // name: '',
+    // alignment: '',
+    // ideals: '',
+    // bonds: '',
+    // flaws: '',
+    // race: '',
+    // size: '',
+    // traits: [],
+    // languages: [],
+    // class: '',
+    // proficiencies: [],
+    // spellCastingAbility: '',
+    // equipment: [],
+    // level: 1,
+    // experiece: 0
+
 
     const [charName, setCharName] = useState('')
     const [charRace, setCharRace] = useState('')
@@ -186,6 +187,13 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
         // console.log(charAlign)
     }
 
+    const raceList = raceOptions.map((raceOption, index) => (
+        <option key={index}>{raceOption.name}</option>
+    ))
+
+    const classList = classOptions.map((classOption, index) => (
+        <option key={index}>{classOption.name}</option>
+    ))
 
     useEffect(() => {
         handleRacesFetch()
@@ -210,48 +218,47 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                             <Form.Group id="raceSelection" className="mb-3" >
                                 <Form.Label>Race</Form.Label>
                                 <Form.Select type="select" placeholder="Race" onChange={(e) => handleRaceSelect(e.target.value)} required>
-                                    {raceOptions.map((raceOption, index) => (
-                                        <option key={index}>{raceOption.name}</option>
-                                    ))}
+                                    <option value='none' hidden></option>
+                                    {raceList}
                                 </Form.Select>
                                 {/* {raceData === '' ? null : (
                                     <> */}
-                                        <div>
-                                            <h3>Size: {raceData.size}</h3>
-                                            <h3>Speed: {raceData.speed}</h3>
-                                        </div>
+                                <div>
+                                    <h3>Size: {raceData.size}</h3>
+                                    <h3>Speed: {raceData.speed}</h3>
+                                </div>
 
-                                        <div>
-                                            <h4>Proficiencies</h4>
-                                            <ul>
-                                                {/* {raceData.starting_proficiencies.map((proficiency, index) => (
-                                <li key={index}>{proficiency.name}</li>
-                            ))} */}
-                                            </ul>
-                                        </div>
+                                <div>
+                                    <h4>Proficiencies</h4>
+                                    <ul>
+                                        {raceData.proficiencies.map((proficiency, index) => (
+                                            <li key={index}>{proficiency.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
 
-                                        <div>
-                                            {/* {raceData.traits != null ? (
+                                <div>
+                                    {/* {raceData.traits != null ? (
                                                 <> */}
-                                            <h4>Traits</h4>
-                                            <ul>
-                                                {raceData.traits.map((trait, index) => (
-                                                    <li key={index}>{trait.name}</li>
-                                                ))}
-                                            </ul>
-                                                {/* </>
-                                            ) : null} */}
-                                        </div>
-
-                                        <div>
-                                            <h4>Languages</h4>
-                                            <ul>
-                                                {raceData.languages.map((language, index) => (
-                                                    <li key={index}>{language.name}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                                    <h4>Traits</h4>
+                                    <ul>
+                                        {raceData.traits.map((trait, index) => (
+                                            <li key={index}>{trait.name}</li>
+                                        ))}
+                                    </ul>
                                     {/* </>
+                                            ) : null} */}
+                                </div>
+
+                                <div>
+                                    <h4>Languages</h4>
+                                    <ul>
+                                        {raceData.languages.map((language, index) => (
+                                            <li key={index}>{language.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                {/* </>
                                 )} */}
                             </Form.Group>
                         </>
@@ -264,15 +271,14 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                             <Form.Group id="classSelection" className="mb-3" >
                                 <Form.Label>Class</Form.Label>
                                 <Form.Select type="select" placeholder="Class" onChange={(e) => handleClassSelect(e.target.value)} >
-                                    {classOptions.map((classOption, index) => (
-                                        <option key={index}>{classOption.name}</option>
-                                    ))}
+                                    <option value='none' hidden></option>
+                                    {classList}
                                 </Form.Select>
 
                                 <div>
-                                        <h3>Hit Die: d{classData.hitDie}</h3>
-                                      
-                                    
+                                    <h3>Hit Die: d{classData.hitDie}</h3>
+
+
                                     <h3>Proficiencies</h3>
                                     <ul>
                                         {classData.proficiencies.map((item, index) => (
@@ -280,19 +286,19 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                                         ))}
                                     </ul>
 
-                                
+
                                     <h3>Starting Equipment</h3>
                                     <ul>
                                         {classData.startingEquipment.map((item, index) => (
                                             <li key={index}>{item.equipment.name} x {item.quantity}</li>
                                         ))}
                                     </ul>
-                                   
 
-                                
+
+
                                     <h3>Spellcasting</h3>
-                               Spellcasting Ability: {classData.spellCastingAbility}
-                               {/* <ul>
+                                    Spellcasting Ability: {classData.spellCastingAbility}
+                                    {/* <ul>
                                {classData.spellCastingAbilityDesc.map((desc, index) => (
                                    <li key={index}>{desc.name}</li>
                                    ))}
@@ -303,12 +309,12 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                         </>
                     ) : null}
 
-                    
-                    
+
+
                     {progress === 50 ?
                         (
                             <>
-                            {/* <Form.Group>
+                                {/* <Form.Group>
                                 <Form.Label>Ability Scores</Form.Label>
                                 <Form.Select type="select" onChange={(e) => handleStatMethod(e.target.value)}>
                                     <option>Roll Stats</option>
@@ -321,8 +327,8 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                         )
                         : null}
 
-                        {progress === 75 ? 
-                            (
+                    {progress === 75 ?
+                        (
                             <>
                                 <h5>Character Details</h5>
                                 <Form.Group>
@@ -343,12 +349,12 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                                         <option>Chaotic Evil</option>
                                     </Form.Select>
                                     <Form.Label>Ideals</Form.Label>
-                            <Form.Control type='text' placeholder='Ideals' required></Form.Control>
-                            <Form.Label required>Bonds</Form.Label>
-                            <Form.Control type='text' placeholder='Bonds' required></Form.Control>
-                            <Form.Label>Flaws</Form.Label>
-                            <Form.Control type='text' placeholder='Flaws' required></Form.Control>
-                                <Form.Label>Background</Form.Label>
+                                    <Form.Control type='text' placeholder='Ideals' required></Form.Control>
+                                    <Form.Label required>Bonds</Form.Label>
+                                    <Form.Control type='text' placeholder='Bonds' required></Form.Control>
+                                    <Form.Label>Flaws</Form.Label>
+                                    <Form.Control type='text' placeholder='Flaws' required></Form.Control>
+                                    <Form.Label>Background</Form.Label>
                                     <Form.Select required>
                                         <option>Acolyte</option>
                                     </Form.Select>
@@ -385,7 +391,7 @@ const {characters, setCharacters, handleClose} = useContext(CharacterDataContext
                             Submit
                         </Button>
                     ) : (
-                        
+
                         <Button variant="primary" type="submit" >
                             Submit
                         </Button>
