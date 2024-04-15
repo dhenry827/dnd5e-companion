@@ -16,7 +16,7 @@ const Glossary_Races = () => {
       })
 
       const data = await response.json()
-
+      
       console.log(data)
 
       setRaceData(data)
@@ -25,7 +25,7 @@ const Glossary_Races = () => {
 
   useEffect(() => {
       raceDataFetch()
-  },[])
+  },[raceName]) //raceName is added to dependency array so that whenever Params are changed, the component checks for changes to raceName in order to rerender
 
   return (
     <div className='glossary'>

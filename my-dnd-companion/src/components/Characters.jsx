@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import '../stylesheets/Characters.css'
 import CharacterCreator from './CharacterCreator';
+import { Link } from 'react-router-dom'
 
 export const CharacterDataContext = createContext();
 
@@ -16,20 +17,13 @@ const Characters = () => {
     const [name, setName] = useState('')
     const [level, setLevel] = useState(0)
     const [race, setRace] = useState('')
+    const [subrace, setSubrace] = useState('')
     const [size, setSize] = useState('')
     const [speed, setSpeed] = useState(0)
     const [proficiences, setProficiencies] = useState([])
     const [traits, setTraits] = useState([])
 
-    const handleCharacter = () => setCharacter({
-        name: name,
-        level: level,
-        race: race,
-        size: size,
-        speed: speed,
-        traits: traits,
-        proficiences: proficiences
-    })
+    // const handleCharacter = () => setCharacters([])
 
 
     const handleShow = () => setShow(true)
@@ -51,7 +45,8 @@ const Characters = () => {
                 <div id='characterCont'>
                     {characters && characters.map((character, index) => (
                      
-                        <button className='charCard' key={index}>
+                        <Link to={`/Characters/${index}`} key={index} className='charCard'  >
+                            <Button className='charCard'>
                             <div className='charInfo' >
                                 <p>{character.name}</p>
                                 <p>{character.race}</p>
@@ -65,7 +60,8 @@ const Characters = () => {
                                 Delete
                             </Button>
                             </div>
-                        </button>
+                            </Button>
+                        </Link>
                      
 
                     ))}

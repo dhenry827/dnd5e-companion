@@ -22,6 +22,26 @@ export const ClassDataContext = createContext({ classData: {}, setClassData: () 
 const CharacterCreator = () => {
 
     // const { users, setUsers } = useContext(UserDataContext)
+    const { characters, setCharacters, handleClose } = useContext(CharacterDataContext)
+
+    const [ newCharacter, setNewCharacter ] = useState({
+        name: '',
+        race: '',
+        // subrace: '',
+        class: '',
+        lvl: 1,
+        exp: 0,
+        size: '',
+        speed: 0,
+        ability_scores: [],
+        ability_bonuses: [],
+        ideals: '',
+        bonds: '',
+        flaws: '',
+        languages: [],
+        traits: [],
+        equipment: [],
+    })
 
     const [progress, setProgress] = useState(0) // Initializes progress state to manage progression of form progressbar and next button
     const handleForwardsProgress = () => { // Creates a function to control the progress state
@@ -39,28 +59,34 @@ const CharacterCreator = () => {
         console.log(progress)
     }
 
-    const [statMethod, setStatMethod] = useState('')
-
-    const handleStatMethod = (selectedMethod) => {
-        setStatMethod(selectedMethod);
-        console.log(selectedMethod)
-    };
-
 
     const [raceOptions, setRaceOptions] = useState([]) //state used to hold fetched race options for character building
     const [selectedRace, setSelectedRace] = useState(''); //state to hold the current race selected by the user. Is sent to the RaceFetch component to fetch data based on the users chosen race.
+    const [selectedSubrace, setSelectedSubrace] = useState(''); //state to hold the current race selected by the user. Is sent to the RaceFetch component to fetch data based on the users chosen race.
     const [raceData, setRaceData] = useState({ //state to hold the race information fetched from the RaceFetch component
         name: '',
-        speed: '',
+        subrace: [],
+        size: '',
+        speed: 0,
         abilityBonuses: [],
         proficiencies: [],
-        size: '',
         languages: [],
         traits: []
     });
 
 
     const handleRacesFetch = async () => {
+
+        // setRaceData({//sets raceData to a blank slate before fetching new data
+        //     name: '',
+        //     subrace: [],
+        //     size: '',
+        //     speed: 0,
+        //     abilityBonuses: [],
+        //     proficiencies: [],
+        //     languages: [],
+        //     traits: []
+        // })
 
         //line 40-46 attempts to fecth a list of races from the api.
         try {
@@ -87,8 +113,27 @@ const CharacterCreator = () => {
 
     const handleRaceSelect = (selectedRace) => {
         setSelectedRace(selectedRace.toLowerCase());
+        console.log(typeof (selectedRace))
         setCharRace(selectedRace)
     };
+
+    const handleSubraceSelect = (selectedSubrace) => {
+        setSelectedSubrace(selectedSubrace.toLowerCase());
+        console.log(typeof (selectedSubrace))
+        setCharSubrace(selectedSubrace)
+    };
+
+    const addRace = (raceData) => {
+        setNewCharacter({
+            ...newCharacter,
+            race: raceData.name,
+            size: raceData.size,
+            speed: raceData.speed,
+            proficiencies: [raceData.proficiencies],
+            traits: raceData.traits
+        })
+        console.log(newCharacter)
+    }
 
     const [classOptions, setClassOptions] = useState([])
     const [selectedClass, setSelectedClass] = useState('');
@@ -96,10 +141,11 @@ const CharacterCreator = () => {
         name: '',
         hitDie: 0,
         proficiencies: [],
+        proficiencyOptions: 0,
         proficiencyChoices: [],
-        proficiencyChoicesNum: 0,
         startingEquipment: [],
-        startingEquipmentChoices: [],
+        startEquipOptions: 0,
+        startEquipChoices: [],
         spellCastingAbility: '',
         spellCastingAbilityDesc: []
     });
@@ -134,21 +180,44 @@ const CharacterCreator = () => {
         setCharClass(selectedClass)
     };
 
+    const addClass = (classData) => {
+        setNewCharacter({
+            ...newCharacter,
+            class: classData.name,
+            hitDie: classData.hitDie,
+            proficiencies: [...newCharacter.proficiencies, classData.proficiencies],
+            equipment: classData.startingEquipment,
+            // spellCastingAbility: classData.spellCastingAbility,
+        })
+        console.log(newCharacter)
+    }
 
+    const [statMethod, setStatMethod] = useState('')
 
-    const { characters, setCharacters, handleClose } = useContext(CharacterDataContext)
+    const handleStatMethod = (selectedMethod) => {
+        setStatMethod(selectedMethod);
+        console.log(selectedMethod)
+    };
 
+    const addStats = () => {
+        setNewCharacter({
+            ...newCharacter,
+            // ability_scores: 
+        })
+        console.log(newCharacter)
+    }
+
+    const addDetails = () => {
+        setNewCharacter({
+            ...newCharacter,
+            alignment: charAlign
+        })
+        console.log(newCharacter)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        const newCharacter = {
-            name: charName,
-            race: charRace,
-            class: charClass,
-            lvl: charLvl,
-            alignment: charAlign
-        }
         setCharacters([...characters, newCharacter])
         console.log(newCharacter, "at submission")
         handleClose()
@@ -173,6 +242,7 @@ const CharacterCreator = () => {
 
     const [charName, setCharName] = useState('')
     const [charRace, setCharRace] = useState('')
+    const [charSubrace, setCharSubrace] = useState('')
     const [charClass, setCharClass] = useState('')
     const [charLvl, setCharLvl] = useState(1)
     const [charAlign, setCharAlign] = useState('True Neutral')
@@ -191,6 +261,10 @@ const CharacterCreator = () => {
         <option key={index}>{raceOption.name}</option>
     ))
 
+    const subRaceList = raceData.subrace.map((subraces, index) => (
+        <option key={index} value={subraces.index}>{subraces.name}</option>
+    ))
+
     const classList = classOptions.map((classOption, index) => (
         <option key={index}>{classOption.name}</option>
     ))
@@ -198,7 +272,7 @@ const CharacterCreator = () => {
     useEffect(() => {
         handleRacesFetch()
         handleClassesFetch()
-    }, [])
+    }, [newCharacter, selectedRace, selectedClass])
 
     return (
         <div>
@@ -216,50 +290,67 @@ const CharacterCreator = () => {
                         <>
                             <h5>Select Your Race</h5>
                             <Form.Group id="raceSelection" className="mb-3" >
+
                                 <Form.Label>Race</Form.Label>
                                 <Form.Select type="select" placeholder="Race" onChange={(e) => handleRaceSelect(e.target.value)} required>
                                     <option value='none' hidden></option>
                                     {raceList}
                                 </Form.Select>
-                                {/* {raceData === '' ? null : (
-                                    <> */}
-                                <div>
-                                    <h3>Size: {raceData.size}</h3>
-                                    <h3>Speed: {raceData.speed}</h3>
-                                </div>
+                                {!selectedRace ? null : (
+                                    <>
+                                        {/* <div>
+                                            {raceData.subrace.length > 0 ? (
+                                                <>
+                                                    <Form.Label>Subrace</Form.Label>
+                                                    <Form.Select type="select" placeholder="Subrace" onChange={(e) => handleSubraceSelect(e.target.value)} required>
+                                                        <option value='none' hidden></option>
+                                                        <option value='none'></option>
+                                                        {subRaceList}
+                                                    </Form.Select>
+                                                </>
+                                            ) : null}
+                                        </div> */}
+                                        <div>
+                                            <h3>Size: {raceData.size}</h3>
+                                            <h3>Speed: {raceData.speed}</h3>
+                                        </div>
 
-                                <div>
-                                    <h4>Proficiencies</h4>
-                                    <ul>
-                                        {raceData.proficiencies.map((proficiency, index) => (
-                                            <li key={index}>{proficiency.name}</li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                        <div>
+                                            <h4>Ability Bonuses</h4>
+                                            <ul>
+                                                {raceData.abilityBonuses.map((ability, index) => (
+                                                    <li key={index}>{ability.ability_score.name}: +{ability.bonus}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4>Proficiencies</h4>
+                                            <ul>
+                                                {raceData.proficiencies.map((proficiency, index) => (
+                                                    <li key={index}>{proficiency.name}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
 
-                                <div>
-                                    {/* {raceData.traits != null ? (
-                                                <> */}
-                                    <h4>Traits</h4>
-                                    <ul>
-                                        {raceData.traits.map((trait, index) => (
-                                            <li key={index}>{trait.name}</li>
-                                        ))}
-                                    </ul>
-                                    {/* </>
-                                            ) : null} */}
-                                </div>
+                                        <div>
+                                            <h4>Traits</h4>
+                                            <ul>
+                                                {raceData.traits.map((trait, index) => (
+                                                    <li key={index}>{trait.name}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
 
-                                <div>
-                                    <h4>Languages</h4>
-                                    <ul>
-                                        {raceData.languages.map((language, index) => (
-                                            <li key={index}>{language.name}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                {/* </>
-                                )} */}
+                                        <div>
+                                            <h4>Languages</h4>
+                                            <ul>
+                                                {raceData.languages.map((language, index) => (
+                                                    <li key={index}>{language.name}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
                             </Form.Group>
                         </>
                     ) : null}
@@ -274,36 +365,96 @@ const CharacterCreator = () => {
                                     <option value='none' hidden></option>
                                     {classList}
                                 </Form.Select>
-
-                                <div>
-                                    <h3>Hit Die: d{classData.hitDie}</h3>
-
-
-                                    <h3>Proficiencies</h3>
-                                    <ul>
-                                        {classData.proficiencies.map((item, index) => (
-                                            <li key={index}>{item.name}</li>
-                                        ))}
-                                    </ul>
+                                {!selectedClass ? null : (
+                                    <>
+                                        {classData.spellCastingAbility === null ?
+                                            (
+                                                <div>
+                                                    <h3>Hit Die: d{classData.hitDie}</h3>
 
 
-                                    <h3>Starting Equipment</h3>
-                                    <ul>
-                                        {classData.startingEquipment.map((item, index) => (
-                                            <li key={index}>{item.equipment.name} x {item.quantity}</li>
-                                        ))}
-                                    </ul>
+                                                    <h3>Proficiencies</h3>
+                                                    <ul>
+                                                        {classData.proficiencies.map((item, index) => (
+                                                            <li key={index}>{item.name}</li>
+                                                        ))}
+                                                    </ul>
 
 
+                                                    <p>Choose {classData.proficiencyOptions}</p>
 
-                                    <h3>Spellcasting</h3>
-                                    Spellcasting Ability: {classData.spellCastingAbility}
-                                    {/* <ul>
-                               {classData.spellCastingAbilityDesc.map((desc, index) => (
-                                   <li key={index}>{desc.name}</li>
-                                   ))}
-                                </ul> */}
-                                </div>
+                                                    <h3>Starting Equipment</h3>
+                                                    <ul>
+                                                        {classData.startingEquipment.map((item, index) => (
+                                                            <li key={index}>{item.equipment.name} x {item.quantity}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <h3>Hit Die: d{classData.hitDie}</h3>
+
+
+                                                    <h3>Proficiencies</h3>
+                                                    <ul>
+                                                        {classData.proficiencies.map((item, index) => (
+                                                            <li key={index}>{item.name}</li>
+                                                        ))}
+                                                    </ul>
+
+                                                    <>
+                                                        <Form.Label>Choose {classData.proficiencyOptions} from:</Form.Label>
+                                                        {classData.proficiencyChoices.map((choice, index) => (
+                                                            <Form.Check
+                                                                key={index}
+                                                                type="checkbox"
+                                                                label={choice.item.name}
+                                                            />
+                                                        ))}
+                                                    </>
+
+
+                                                    <h3>Starting Equipment</h3>
+                                                    <ul>
+                                                        {classData.startingEquipment.map((item, index) => (
+                                                            <li key={index}>{item.equipment.name} x {item.quantity}</li>
+                                                        ))}
+                                                    </ul>
+
+
+                                                    <>
+                                                        <Form.Label>Choose {classData.startEquipOptions} from:</Form.Label>
+                                                        {classData.startEquipChoices.map((choice, index) => (
+                                                            <span key={index}><br />
+                                                                {choice.desc}
+                                                                {/* {choice.options[index].option_type === "counted_reference" ? (
+                                                                    <Form.Check
+                                                                        type="checkbox"
+                                                                        label={choice.options[index].count}
+                                                                    />
+                                                                ) : (
+                                                                    <Form.Check
+                                                                        type="checkbox"
+                                                                        label={1}
+                                                                    />
+                                                                )} */}
+
+                                                            </span>
+                                                        ))}
+                                                    </>
+
+
+                                                    <h3>Spellcasting</h3>
+                                                    Spellcasting Ability: {classData.spellCastingAbility}
+                                                    {/* <ul>
+                                                        {classData.spellCastingAbilityDesc.map((desc, index) => (
+                                                            <li key={index}>{desc.name}</li>
+                                                        ))}
+                                                        </ul> */}
+                                                </div>
+                                            )}
+                                    </>
+                                )}
                             </Form.Group>
 
                         </>
@@ -366,11 +517,17 @@ const CharacterCreator = () => {
                         (
                             <>
                                 <h3>Review Your Character</h3>
-                                <p><b>Name: </b>{charName}</p>
-                                <p><b>Race: </b>{charRace}</p>
-                                <p><b>Class: </b>{charClass}</p>
-                                <p><b>Lvl: </b>{charLvl}</p>
-                                <p><b>Alignment: </b>{charAlign}</p>
+                                <>
+                                    <p><b>Name: </b>{charName}</p>
+                                    <p><b>Race: </b>{charRace}</p>
+                                    <p><b>Class: </b>{charClass} Lvl. {charLvl}</p>
+                                    <p><b>Alignment: </b>{charAlign}</p>
+                                </>
+
+                                {/* <>
+                                    <b>Proficiencies:</b>
+                                    
+                                </> */}
                             </>
                         ) : null}
 
@@ -402,17 +559,28 @@ const CharacterCreator = () => {
                             <>
                                 <Button type='button' onClick={handleForwardsProgress} disabled>Next</Button>
                             </>
-                        ) : (
+                        ) : progress === 0 ? (
                             <>
-                                <Button type='button' onClick={handleForwardsProgress}>Next</Button>
+                                <Button type='button' onClick={() => { addRace(raceData); handleForwardsProgress() }}>Next</Button>
                             </>
-                        )}
+                        ) : progress === 25 ? (
+                            <>
+                                <Button type='button' onClick={() => { addClass(classData); handleForwardsProgress() }}>Next</Button>
+                            </>
+                        ) : progress === 50 ? (
+                            <>
+                                <Button type='button' onClick={() => { addDetails(); handleForwardsProgress() }}>Next</Button>
+                            </>
+                        ) : <>
+                            <Button type='button' onClick={handleForwardsProgress}>Next</Button>
+                        </>
+                    }
 
                 </Modal.Footer>
             </Form>
 
 
-            <RaceContext.Provider value={selectedRace}>
+            <RaceContext.Provider value={{ selectedRace, selectedSubrace }}>
                 <RaceDataContext.Provider value={{ raceData, setRaceData }}>
                     <RaceFetch />
                 </RaceDataContext.Provider>

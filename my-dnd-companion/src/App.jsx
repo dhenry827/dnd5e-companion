@@ -16,6 +16,7 @@ import Glossary_Features from './routes/glossaryRoutes/Glossary_Features'
 import Glossary_Skills from './routes/glossaryRoutes/Glossary_Skills'
 import Glossary_Traits from './routes/glossaryRoutes/Glossary_Traits'
 import Characters from './components/Characters'
+import CharacterSheet from './components/CharacterSheet'
 
 
 export const UserDataContext = createContext() 
@@ -54,7 +55,7 @@ function App() {
             <Route path='/login' element={<Login />}/>
             <Route path='/' element={<Home />} />
             <Route path='/characters' element={<Characters />} />
-            <Route path='/characters/:characterName' element={'#'} />
+            <Route path='/characters/:characterName' element={<CharacterSheet />} />
             <Route path='/glossary/classes/:class' element={<Glossary_Classes />} />
             <Route path='/glossary/races/:race' element={<Glossary_Races />} />
             <Route path='/glossary/ability-scores' element={<Glossary_Ability_Scores />} />
