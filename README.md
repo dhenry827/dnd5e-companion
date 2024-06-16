@@ -1,5 +1,5 @@
 
-# Paladjinn
+# PalaDjinn 
 A Dungeons and Dragons 5th Edition character builder/tracker that utilizes the D&D 5e API to streamline the character building process for new and experienced players alike.
 
 
