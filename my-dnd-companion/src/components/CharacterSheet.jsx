@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { CharacterDataContext } from './Characters'
+import { CharacterDataContext } from '../App'
+import StatBlock from './CharacterSheet/StatBlock'
+import CharacterInfo from './CharacterSheet/CharacterInfo'
 
 
 const CharacterSheet = () => {
@@ -8,9 +10,10 @@ const CharacterSheet = () => {
 
 
   return (
-    <>
-        
-    </>
+    <div id='characterSheet'>
+      <CharacterInfo/>
+      <StatBlock />
+    </div>
   )
 }
 

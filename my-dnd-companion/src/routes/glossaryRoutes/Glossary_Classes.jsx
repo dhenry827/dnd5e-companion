@@ -6,6 +6,8 @@ const Glossary_Classes = () => {
   const [classData, setClassData] = useState({})
   const [classProficiencies, setClassProficiencies] = useState([])
 
+  const classImage = `../../assets/class_image_${className}.png`
+
   const classDataFetch = async () => {
     const response = await fetch(`https://www.dnd5eapi.co/api/classes/${className}`, {
         method: "GET",
@@ -27,6 +29,7 @@ useEffect(() => {
 
   return (
     <div className='glossary'>
+      <img src={`../../assets/class_image_${className}.png`}></img>
       <h3>{classData.name}</h3>
       <h5>Hit Die: d{classData.hit_die}</h5>
 

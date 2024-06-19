@@ -1,0 +1,42 @@
+#characterSheet {
+    display: flex;
+    margin:1%;
+}
+
+#infoBlock {
+    width: 33vw
+}
+
+#charInfo {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.info {
+    text-align: left;
+    border-style: solid;
+    overflow-wrap: break-word;
+    padding: 6px 12px;
+}
+
+#attrBlock {
+    display: flex;
+    justify-content: space-around;
+    width: 33vw
+}
+
+.statBox {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10%;
+    padding: 10px 20px;
+}
+
+.modifier {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 50%;
+}

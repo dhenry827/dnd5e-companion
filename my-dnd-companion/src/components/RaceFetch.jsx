@@ -4,7 +4,7 @@ import { RaceContext, RaceDataContext } from './CharacterCreator';
 
 const RaceFetch = () => {
 
-    const { selectedRace, selectedSubrace } = useContext(RaceContext);
+    const { selectedRace, selectedSubrace, setSelectedSubrace } = useContext(RaceContext);
     const { raceData, setRaceData } = useContext(RaceDataContext);
 
 
@@ -41,6 +41,7 @@ const RaceFetch = () => {
                     setRaceData({
                         name: data.name,
                         subrace: data.subraces,
+                        subrace_name: '',
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
@@ -52,6 +53,7 @@ const RaceFetch = () => {
                     setRaceData({
                         name: data.name,
                         subrace: data.subraces,
+                        subrace_name: '',
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
@@ -63,6 +65,7 @@ const RaceFetch = () => {
                     setRaceData({
                         name: data.name,
                         subrace: data.subraces,
+                        subrace_name: '',
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
@@ -74,6 +77,7 @@ const RaceFetch = () => {
                     setRaceData({
                         name: data.name,
                         subrace: data.subraces,
+                        subrace_name: '',
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
@@ -111,6 +115,7 @@ const RaceFetch = () => {
     
                     setRaceData({//updates fields in raceData with subrace information
                         ...raceData,
+                        subrace_name: data.name,
                         abilityBonuses: [...raceData.abilityBonuses, ...data.ability_bonuses],
                         proficiencies: [...raceData.proficiencies, ...data.starting_proficiencies],
                         traits: [...raceData.traits, ...data.racial_traits],
@@ -131,11 +136,14 @@ const RaceFetch = () => {
         if (selectedRace) {
             handleFetchRace();
         }
+    }, [selectedRace]);
+
+    useEffect(() => {
         if (selectedSubrace) {
             handleFetchSubrace();
         }
-    }, [selectedRace, selectedSubrace]);
-
+    }, [selectedSubrace]);
+    
     return null;
 };
 

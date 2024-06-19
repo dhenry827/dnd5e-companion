@@ -7,7 +7,8 @@ import Form from 'react-bootstrap/Form';
 import RaceFetch from './RaceFetch';
 import ClassFetch from './ClassFetch';
 import PointBuy from './PointBuy';
-import { CharacterDataContext } from './Characters';
+import { CharacterDataContext } from '../App';
+import { ModalViewContext } from './Characters';
 
 
 
@@ -18,26 +19,48 @@ export const RaceDataContext = createContext({ raceData: {}, setRaceData: () => 
 export const ClassContext = createContext('') //Defines a context for Class
 export const ClassDataContext = createContext({ classData: {}, setClassData: () => { } }); // Defines a context for ClassData
 
+export const AttributeDataContext = createContext()
 
 const CharacterCreator = () => {
 
     // const { users, setUsers } = useContext(UserDataContext)
-    const { characters, setCharacters, handleClose } = useContext(CharacterDataContext)
+    const { characters, setCharacters } = useContext(CharacterDataContext)
+    const handleClose = useContext(ModalViewContext)
 
-    const [ newCharacter, setNewCharacter ] = useState({
+    const [newCharacter, setNewCharacter] = useState({
         name: '',
-        race: '',
-        // subrace: '',
-        class: '',
-        lvl: 1,
+        alignment: '',
+        race: {
+            name: '',
+            subrace_name: ''
+        },
+        classes: [],
         exp: 0,
         size: '',
         speed: 0,
-        ability_scores: [],
+        death_saves: {
+            successes: 0,
+            failures: 0
+        },
+        ability_scores: {
+            str: 8,
+            strMod: -1,
+            dex: 8,
+            dexMod: -1,
+            con: 8,
+            conMod: -1,
+            wis: 8,
+            wisMod: -1,
+            int: 8,
+            intMod: -1,
+            cha: 8,
+            chaMod: -1
+        },
         ability_bonuses: [],
         ideals: '',
         bonds: '',
         flaws: '',
+        background: '',
         languages: [],
         traits: [],
         equipment: [],
@@ -114,24 +137,39 @@ const CharacterCreator = () => {
     const handleRaceSelect = (selectedRace) => {
         setSelectedRace(selectedRace.toLowerCase());
         console.log(typeof (selectedRace))
-        setCharRace(selectedRace)
     };
 
     const handleSubraceSelect = (selectedSubrace) => {
         setSelectedSubrace(selectedSubrace.toLowerCase());
         console.log(typeof (selectedSubrace))
-        setCharSubrace(selectedSubrace)
     };
 
     const addRace = (raceData) => {
+        if(raceData.subrace){
         setNewCharacter({
             ...newCharacter,
-            race: raceData.name,
+            race: {
+                name: raceData.name,
+                subrace_name: raceData.subrace_name
+            },
             size: raceData.size,
             speed: raceData.speed,
             proficiencies: [raceData.proficiencies],
-            traits: raceData.traits
-        })
+            traits: raceData.traits,
+            
+        })} else {
+            setNewCharacter({
+                ...newCharacter,
+                race: {
+                    name: raceData.name,
+                    subrace_name: ''
+                },
+                size: raceData.size,
+                speed: raceData.speed,
+                proficiencies: [raceData.proficiencies],
+                traits: raceData.traits,
+                
+        })}
         console.log(newCharacter)
     }
 
@@ -177,18 +215,23 @@ const CharacterCreator = () => {
 
     const handleClassSelect = (selectedClass) => {
         setSelectedClass(selectedClass.toLowerCase())
-        setCharClass(selectedClass)
     };
 
     const addClass = (classData) => {
-        setNewCharacter({
-            ...newCharacter,
-            class: classData.name,
-            hitDie: classData.hitDie,
-            proficiencies: [...newCharacter.proficiencies, classData.proficiencies],
-            equipment: classData.startingEquipment,
-            // spellCastingAbility: classData.spellCastingAbility,
-        })
+        setNewCharacter(prevState => ({
+            ...prevState,
+            classes: [
+                ...prevState.classes,
+                {
+                    name: classData.name,
+                    level: 1,
+                    hitDie: classData.hitDie,
+                    proficiencies: [...prevState.proficiencies, ...classData.proficiencies],
+                    equipment: classData.startingEquipment,
+                    // spellCastingAbility: classData.spellCastingAbility,
+                }
+            ]
+        }));
         console.log(newCharacter)
     }
 
@@ -198,30 +241,6 @@ const CharacterCreator = () => {
         setStatMethod(selectedMethod);
         console.log(selectedMethod)
     };
-
-    const addStats = () => {
-        setNewCharacter({
-            ...newCharacter,
-            // ability_scores: 
-        })
-        console.log(newCharacter)
-    }
-
-    const addDetails = () => {
-        setNewCharacter({
-            ...newCharacter,
-            alignment: charAlign
-        })
-        console.log(newCharacter)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        setCharacters([...characters, newCharacter])
-        console.log(newCharacter, "at submission")
-        handleClose()
-    }
 
     // name: '',
     // alignment: '',
@@ -239,26 +258,28 @@ const CharacterCreator = () => {
     // level: 1,
     // experiece: 0
 
-
-    const [charName, setCharName] = useState('')
-    const [charRace, setCharRace] = useState('')
-    const [charSubrace, setCharSubrace] = useState('')
-    const [charClass, setCharClass] = useState('')
-    const [charLvl, setCharLvl] = useState(1)
-    const [charAlign, setCharAlign] = useState('True Neutral')
-
-    const handleName = (e) => {
-        setCharName(e)
-        // console.log(charName)
+    const handleName = (charName) => {
+        setNewCharacter({ ...newCharacter, name: charName })
     }
 
-    const handleAlignment = (e) => {
-        setCharAlign(e)
-        // console.log(charAlign)
+    const handleAlignment = (charAlign) => {
+        setNewCharacter({ ...newCharacter, alignment: charAlign })
+    }
+
+    const handleBonds = (charBonds) => {
+        setNewCharacter({ ...newCharacter, bonds: charBonds })
+    }
+
+    const handleFlaws = (charFlaws) => {
+        setNewCharacter({ ...newCharacter, flaws: charFlaws })
+    }
+
+    const handleIdeals = (charIdeals) => {
+        setNewCharacter({ ...newCharacter, ideals: charIdeals })
     }
 
     const raceList = raceOptions.map((raceOption, index) => (
-        <option key={index}>{raceOption.name}</option>
+        <option key={index} value={raceOption.index}>{raceOption.name}</option>
     ))
 
     const subRaceList = raceData.subrace.map((subraces, index) => (
@@ -266,13 +287,21 @@ const CharacterCreator = () => {
     ))
 
     const classList = classOptions.map((classOption, index) => (
-        <option key={index}>{classOption.name}</option>
+        <option key={index} value={classOption.index}>{classOption.name}</option>
     ))
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        setCharacters([...characters, newCharacter])
+        console.log(newCharacter, "at submission")
+        handleClose()
+    }
 
     useEffect(() => {
         handleRacesFetch()
         handleClassesFetch()
-    }, [newCharacter, selectedRace, selectedClass])
+    }, [newCharacter, selectedRace, selectedSubrace, selectedClass])
 
     return (
         <div>
@@ -288,28 +317,27 @@ const CharacterCreator = () => {
                 <Modal.Body>
                     {progress === 0 ? (
                         <>
-                            <h5>Select Your Race</h5>
+                            <h5>Race Selection</h5>
                             <Form.Group id="raceSelection" className="mb-3" >
 
-                                <Form.Label>Race</Form.Label>
-                                <Form.Select type="select" placeholder="Race" onChange={(e) => handleRaceSelect(e.target.value)} required>
-                                    <option value='none' hidden></option>
+                                {/* <Form.Label>Race</Form.Label> */}
+                                <Form.Select type="select" value={selectedRace} onChange={(e) => handleRaceSelect(e.target.value)} required>
+                                    <option value='none' hidden>Select a Race (Required)</option>
                                     {raceList}
                                 </Form.Select>
                                 {!selectedRace ? null : (
                                     <>
-                                        {/* <div>
+                                        <div>
                                             {raceData.subrace.length > 0 ? (
                                                 <>
-                                                    <Form.Label>Subrace</Form.Label>
-                                                    <Form.Select type="select" placeholder="Subrace" onChange={(e) => handleSubraceSelect(e.target.value)} required>
-                                                        <option value='none' hidden></option>
-                                                        <option value='none'></option>
+                                                    {/* <Form.Label>Subrace</Form.Label> */}
+                                                    <Form.Select type="select" placeholder="Subrace" value={selectedSubrace} onChange={(e) => handleSubraceSelect(e.target.value)} required>
+                                                        <option value='none' hidden>Select a Subrace (Optional)</option>
                                                         {subRaceList}
                                                     </Form.Select>
                                                 </>
                                             ) : null}
-                                        </div> */}
+                                        </div>
                                         <div>
                                             <h3>Size: {raceData.size}</h3>
                                             <h3>Speed: {raceData.speed}</h3>
@@ -358,11 +386,11 @@ const CharacterCreator = () => {
 
                     {progress === 25 ? (
                         <>
-                            <h5>Select Your Class</h5>
+                            <h5>Class Selection</h5>
                             <Form.Group id="classSelection" className="mb-3" >
                                 <Form.Label>Class</Form.Label>
-                                <Form.Select type="select" placeholder="Class" onChange={(e) => handleClassSelect(e.target.value)} >
-                                    <option value='none' hidden></option>
+                                <Form.Select type="select" placeholder="Class" value={selectedClass} onChange={(e) => handleClassSelect(e.target.value)} required>
+                                    <option value='none' hidden>Select a Class</option>
                                     {classList}
                                 </Form.Select>
                                 {!selectedClass ? null : (
@@ -461,34 +489,36 @@ const CharacterCreator = () => {
                     ) : null}
 
 
-
-                    {progress === 50 ?
-                        (
-                            <>
-                                {/* <Form.Group>
+                    <AttributeDataContext.Provider value={{ newCharacter, setNewCharacter }}>
+                        {progress === 50 ?
+                            (
+                                <>
+                                    {/* <Form.Group>
                                 <Form.Label>Ability Scores</Form.Label>
                                 <Form.Select type="select" onChange={(e) => handleStatMethod(e.target.value)}>
-                                    <option>Roll Stats</option>
-                                    <option>Point Buy</option>
-                                    <option>Choose from Preset</option>
+                                <option>Roll Stats</option>
+                                <option>Point Buy</option>
+                                <option>Choose from Preset</option>
                                 </Form.Select>
                             </Form.Group> */}
-                                <PointBuy />
-                            </>
-                        )
-                        : null}
+                                    <PointBuy />
+                                </>
+                            )
+                            : null}
 
+                    </AttributeDataContext.Provider>
                     {progress === 75 ?
                         (
                             <>
                                 <h5>Character Details</h5>
                                 <Form.Group>
                                     <Form.Label>Name</Form.Label>
-                                    <Form.Control type='text' placeholder='Enter Character Name' value={charName} onChange={(e) => handleName(e.target.value)}></Form.Control>
+                                    <Form.Control type='text' value={newCharacter.name.length > 0 ? newCharacter.name : ''} placeholder={newCharacter.name.length === 0 ? 'Enter Character Name' : ''} onChange={(e) => handleName(e.target.value)} required></Form.Control>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Alignment</Form.Label>
-                                    <Form.Select value={charAlign} onChange={(e) => handleAlignment(e.target.value)} required>
+                                    <Form.Select value={newCharacter.alignment.length > 0 ? newCharacter.alignment : ''} onChange={(e) => handleAlignment(e.target.value)} required>
+                                        <option value='none' hidden></option>
                                         <option>Lawful Good</option>
                                         <option>Lawful Neutral</option>
                                         <option>Lawful Evil</option>
@@ -500,13 +530,14 @@ const CharacterCreator = () => {
                                         <option>Chaotic Evil</option>
                                     </Form.Select>
                                     <Form.Label>Ideals</Form.Label>
-                                    <Form.Control type='text' placeholder='Ideals' required></Form.Control>
-                                    <Form.Label required>Bonds</Form.Label>
-                                    <Form.Control type='text' placeholder='Bonds' required></Form.Control>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.ideals.length > 0 ? newCharacter.ideals : ''} placeholder={newCharacter.ideals.length === 0 ? 'Ideals' : ''} onChange={(e) => handleIdeals(e.target.value)} required></Form.Control>
+                                    <Form.Label>Bonds</Form.Label>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.bonds.length > 0 ? newCharacter.bonds : ''} placeholder={newCharacter.bonds.length === 0 ? 'Bonds' : ''} onChange={(e) => handleBonds(e.target.value)} required></Form.Control>
                                     <Form.Label>Flaws</Form.Label>
-                                    <Form.Control type='text' placeholder='Flaws' required></Form.Control>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.flaws.length > 0 ? newCharacter.flaws : ''} placeholder={newCharacter.flaws.length === 0 ? 'Flaws' : ''} onChange={(e) => handleFlaws(e.target.value)} required></Form.Control>
                                     <Form.Label>Background</Form.Label>
-                                    <Form.Select required>
+                                    <Form.Select  placeholder='Acolyte' required>
+                                        <option value='none' hidden></option>
                                         <option>Acolyte</option>
                                     </Form.Select>
                                 </Form.Group>
@@ -518,10 +549,25 @@ const CharacterCreator = () => {
                             <>
                                 <h3>Review Your Character</h3>
                                 <>
-                                    <p><b>Name: </b>{charName}</p>
-                                    <p><b>Race: </b>{charRace}</p>
-                                    <p><b>Class: </b>{charClass} Lvl. {charLvl}</p>
-                                    <p><b>Alignment: </b>{charAlign}</p>
+                                    <p><b>Name: </b>{newCharacter.name}</p>
+                                    <p><b>Race: </b>{newCharacter.race.subrace_name.length > 0 ? 
+                                    <>{newCharacter.race.subrace_name}</> :
+                                    <>{newCharacter.race.name}</>
+                                    }</p>
+                                    <p><b>Class: </b>{newCharacter.classes[0].name} Lvl. {newCharacter.classes[0].level}</p>
+                                    <p><b>Alignment: </b>{newCharacter.alignment}</p>
+                                    <p><b>Ideals: </b>{newCharacter.ideals}</p>
+                                    <p><b>Bonds: </b>{newCharacter.bonds}</p>
+                                    <p><b>Flaws: </b>{newCharacter.flaws}</p>
+                                    <p><b>Background: </b>{newCharacter.background}</p>
+                                </>
+                                <>
+                                    <p>Strength: {newCharacter.ability_scores.str}</p>
+                                    <p>Dexterity: {newCharacter.ability_scores.dex}</p>
+                                    <p>Constitution: {newCharacter.ability_scores.con}</p>
+                                    <p>Charisma: {newCharacter.ability_scores.cha}</p>
+                                    <p>Intelligence: {newCharacter.ability_scores.int}</p>
+                                    <p>Wisdom: {newCharacter.ability_scores.wis}</p>
                                 </>
 
                                 {/* <>
@@ -569,7 +615,7 @@ const CharacterCreator = () => {
                             </>
                         ) : progress === 50 ? (
                             <>
-                                <Button type='button' onClick={() => { addDetails(); handleForwardsProgress() }}>Next</Button>
+                                <Button type='button' onClick={() => { handleForwardsProgress() }}>Next</Button>
                             </>
                         ) : <>
                             <Button type='button' onClick={handleForwardsProgress}>Next</Button>
@@ -580,7 +626,7 @@ const CharacterCreator = () => {
             </Form>
 
 
-            <RaceContext.Provider value={{ selectedRace, selectedSubrace }}>
+            <RaceContext.Provider value={{ selectedRace, selectedSubrace, setSelectedSubrace }}>
                 <RaceDataContext.Provider value={{ raceData, setRaceData }}>
                     <RaceFetch />
                 </RaceDataContext.Provider>
