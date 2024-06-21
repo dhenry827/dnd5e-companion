@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 
 const RollStats = () => {
@@ -9,12 +9,12 @@ const RollStats = () => {
         modifier = 0
     }
     for(i = 0; i < repeat; i++){
-        const result = Math.round(1 + Math.random() * sides)
-        sum += result
-        console.log(result)
+        const result = Math.round(1 + Math.random() * sides);
+        sum += result;
+        console.log(result);
     }
-    console.log(sum + modifier)
-    return sum + modifier
+    console.log(sum + modifier);
+    return sum + modifier;
 }
 
 
@@ -53,7 +53,7 @@ const RollStats = () => {
       </Form.Group>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default RollStats
+export default RollStats;

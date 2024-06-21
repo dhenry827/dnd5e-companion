@@ -1,35 +1,35 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import { CharacterDataContext } from '../../App'
-import '../../stylesheets/characterSheet.css'
+import { CharacterDataContext } from '../../App';
+import '../../stylesheets/characterSheet.css';
 import Button from 'react-bootstrap/Button';
 
 const StatBlock = () => {
 
-    const { characters, setCharacters } = useContext(CharacterDataContext)
+    const { characters, setCharacters } = useContext(CharacterDataContext);
 
-    const { currentChar } = useParams()
+    const { currentChar } = useParams();
 
     // Calculates characters maximum health points based on cumulative hit dice per class level and constitution modifier
     const calcMaxHP = (classArr) => {
         let totalHP = 0
         for (let i = 0; i < classArr.length; i++) {
             totalHP += (classArr[i].hitDie * classArr[i].level)
-        }
+        };
 
-        totalHP = totalHP + characters[currentChar].ability_scores.conMod
+        totalHP = totalHP + characters[currentChar].ability_scores.conMod;
 
-        return totalHP
+        return totalHP;
     }
 
-    const maxHp = calcMaxHP(characters[currentChar].classes) 
+    const maxHp = calcMaxHP(characters[currentChar].classes) ;
 
-    const [currentHp, setCurrentHp] = useState(maxHp)
+    const [currentHp, setCurrentHp] = useState(maxHp);
 
     const handleHp = (e) => {
         setCurrentHp(e)
-    }
+    };
 
     // Ensures that elements within death saves arrays are updated together instead of seperately. Also enables user to be able to update death saves manually or automatically. 
     const handleDeathSaveChange = (type, count, index = null) => {
@@ -95,9 +95,9 @@ const StatBlock = () => {
     }, [currentHp]);
 
     useEffect(() => {
-        console.log(characters)
-        console.log('Current Character:', characters[currentChar])
-    }, [])
+        console.log(characters);
+        console.log('Current Character:', characters[currentChar]);
+    }, []);
 
     return (
         <div id='statBlock'>
@@ -143,9 +143,9 @@ const StatBlock = () => {
                 Total Hitpoints: {maxHp}
                 <Form.Control type='number' size='lg' value={currentHp} onChange={(e) => handleHp(e.target.value)} max={maxHp} min='0' />
                 Temporary Hitpoints: 0
-                Hit Dice: d{characters[currentChar].hitDie}
+                Hit Dice: {characters[currentChar].classes[0].level}d{characters[currentChar].classes[0].hitDie}
                 Speed: {characters[currentChar].speed}
-                AC:
+                {/* AC: */}
                 <div>
                     <span style={{ display: 'flex' }}>
                         Successes:
@@ -178,7 +178,7 @@ const StatBlock = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default StatBlock
+export default StatBlock;

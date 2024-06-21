@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from 'react'
+import React, { useState, useEffect, useContext, createContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -13,19 +13,19 @@ import { ModalViewContext } from './Characters';
 
 
 
-export const RaceContext = createContext('') // Defines a context for Race
+export const RaceContext = createContext(''); // Defines a context for Race
 export const RaceDataContext = createContext({ raceData: {}, setRaceData: () => { } }); // Defines a context for RaceData
 
-export const ClassContext = createContext('') //Defines a context for Class
+export const ClassContext = createContext(''); //Defines a context for Class
 export const ClassDataContext = createContext({ classData: {}, setClassData: () => { } }); // Defines a context for ClassData
 
-export const AttributeDataContext = createContext()
+export const AttributeDataContext = createContext();
 
 const CharacterCreator = () => {
 
     // const { users, setUsers } = useContext(UserDataContext)
-    const { characters, setCharacters } = useContext(CharacterDataContext)
-    const handleClose = useContext(ModalViewContext)
+    const { characters, setCharacters } = useContext(CharacterDataContext);
+    const handleClose = useContext(ModalViewContext);
 
     const [newCharacter, setNewCharacter] = useState({
         name: '',
@@ -63,23 +63,22 @@ const CharacterCreator = () => {
         background: '',
         languages: [],
         equipment: [],
-    })
+    });
 
-    const [progress, setProgress] = useState(0) // Initializes progress state to manage progression of form progressbar and next button
+    const [progress, setProgress] = useState(0); // Initializes progress state to manage progression of form progressbar and next button
     const handleForwardsProgress = () => { // Creates a function to control the progress state
         if (progress === 100) {  // Prevents progress state from exceeding 100
             return
         }
-        setProgress(progress + 25)
-        // console.log(progress)
-    }
+        setProgress(progress + 25);
+    };
+
     const handleBackwardsProgress = () => { // Initializes progress state to manage regression of form progressbar and back button
         if (progress === 0) { // Prevents progress state from being less than 0
             return
         }
-        setProgress(progress - 25)
-        console.log(progress)
-    }
+        setProgress(progress - 25);
+    };
 
 
     const [raceOptions, setRaceOptions] = useState([]) //state used to hold fetched race options for character building
@@ -117,9 +116,9 @@ const CharacterCreator = () => {
             }
         } catch (error) { //If an error occurs while fetching the data out catch block will log an error message to the console.
             console.error('Error while fetching race data:', error);
-        }
+        };
 
-    }
+    };
 
     const handleRaceSelect = (selectedRace) => {
         setSelectedRace(selectedRace.toLowerCase());
@@ -181,8 +180,8 @@ const CharacterCreator = () => {
                 proficiencies: [],
                 traits: [],
             })
-        }
-    }
+        };
+    };
 
     const [classOptions, setClassOptions] = useState([])
     const [selectedClass, setSelectedClass] = useState('');
@@ -220,9 +219,9 @@ const CharacterCreator = () => {
             }
         } catch (error) {
             console.error('Error while fetching class data:', error);
-        }
+        };
 
-    }
+    };
 
     const handleClassSelect = (selectedClass) => {
         setSelectedClass(selectedClass.toLowerCase())
@@ -242,11 +241,11 @@ const CharacterCreator = () => {
                 }
             ],
             proficiencies: [
-                ...prevState.proficiencies, 
+                ...prevState.proficiencies,
                 ...classData.proficiencies
             ],
         }));
-        console.log(newCharacter)
+        console.log(newCharacter);
     };
 
     const addClassProficiency = (skill) => {
@@ -255,77 +254,83 @@ const CharacterCreator = () => {
             proficiencies: [
                 ...prevState.proficiencies, skill
             ]
-        }))
-        console.log(newCharacter)
-    }
+        }));
+        console.log(newCharacter);
+    };
 
-    const [statMethod, setStatMethod] = useState('')
+    const [statMethod, setStatMethod] = useState('');
 
     const handleStatMethod = (selectedMethod) => {
         setStatMethod(selectedMethod);
-        console.log(selectedMethod)
+        console.log(selectedMethod);
     };
 
-    // name: '',
-    // alignment: '',
-    // ideals: '',
-    // bonds: '',
-    // flaws: '',
-    // race: '',
-    // size: '',
-    // traits: [],
-    // languages: [],
-    // class: '',
-    // proficiencies: [],
-    // spellCastingAbility: '',
-    // equipment: [],
-    // level: 1,
-    // experiece: 0
-
     const handleName = (charName) => {
-        setNewCharacter({ ...newCharacter, name: charName })
-    }
+        const allowedCharacters = /^[a-zA-Z0-9\s]*$/;
+
+        // Filter out unwanted characters
+        charName = charName.split('').filter(char => allowedCharacters.test(char)).join('');
+
+
+        setNewCharacter({ ...newCharacter, name: charName });
+    };
 
     const handleAlignment = (charAlign) => {
-        setNewCharacter({ ...newCharacter, alignment: charAlign })
-    }
+        setNewCharacter({ ...newCharacter, alignment: charAlign });
+    };
 
     const handleBonds = (charBonds) => {
-        setNewCharacter({ ...newCharacter, bonds: charBonds })
-    }
+        const allowedCharacters = /^[a-zA-Z0-9\s.,?!-]*$/;
+
+        charBonds = charBonds.split('').filter(char => allowedCharacters.test(char)).join('');
+
+        setNewCharacter({ ...newCharacter, bonds: charBonds });
+    };
 
     const handleFlaws = (charFlaws) => {
-        setNewCharacter({ ...newCharacter, flaws: charFlaws })
-    }
+        const allowedCharacters = /^[a-zA-Z0-9\s.,?!-]*$/;
+
+        charFlaws = charFlaws.split('').filter(char => allowedCharacters.test(char)).join('');
+
+        setNewCharacter({ ...newCharacter, flaws: charFlaws });
+    };
 
     const handleIdeals = (charIdeals) => {
-        setNewCharacter({ ...newCharacter, ideals: charIdeals })
+        const allowedCharacters = /^[a-zA-Z0-9\s.,?!-]*$/;
+
+        charIdeals = charIdeals.split('').filter(char => allowedCharacters.test(char)).join('');
+
+        setNewCharacter({ ...newCharacter, ideals: charIdeals });
+    };
+
+    const handleBackground = (charBackground) => {
+        setNewCharacter({ ...newCharacter, background: charBackground })
     }
 
     const raceList = raceOptions.map((raceOption, index) => (
         <option key={index} value={raceOption.index}>{raceOption.name}</option>
-    ))
+    ));
 
     const subRaceList = raceData.subrace.map((subraces, index) => (
         <option key={index} value={subraces.index}>{subraces.name}</option>
-    ))
+    ));
 
     const classList = classOptions.map((classOption, index) => (
         <option key={index} value={classOption.index}>{classOption.name}</option>
-    ))
+    ));
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        setCharacters([...characters, newCharacter])
-        console.log(newCharacter, "at submission")
-        handleClose()
-    }
+        setCharacters([...characters, newCharacter]);
+        console.log(newCharacter, "at submission");
+        handleClose();
+    };
 
     useEffect(() => {
-        handleRacesFetch()
-        handleClassesFetch()
-    }, [newCharacter, selectedRace, selectedSubrace, selectedClass])
+        handleRacesFetch();
+        handleClassesFetch();
+    }, [newCharacter, selectedRace, selectedSubrace, selectedClass]);
 
     return (
         <div>
@@ -423,7 +428,7 @@ const CharacterCreator = () => {
                             <Form.Group id="classSelection" className="mb-3" >
                                 <Form.Label>Class</Form.Label>
                                 <Form.Select type="select" placeholder="Class" value={selectedClass} onChange={(e) => handleClassSelect(e.target.value)} required>
-                                    <option value='none' hidden>Select a Class</option>
+                                    <option value='none' hidden>Select a Class (Required)</option>
                                     {classList}
                                 </Form.Select>
                                 {!selectedClass ? null : (
@@ -547,12 +552,12 @@ const CharacterCreator = () => {
                                 <h5>Character Details</h5>
                                 <Form.Group>
                                     <Form.Label>Name</Form.Label>
-                                    <Form.Control type='text' value={newCharacter.name.length > 0 ? newCharacter.name : ''} placeholder={newCharacter.name.length === 0 ? 'Enter Character Name' : ''} onChange={(e) => handleName(e.target.value)} required></Form.Control>
+                                    <Form.Control type='text' value={newCharacter.name} placeholder='Enter Character Name (Required)' onChange={(e) => handleName(e.target.value)} required></Form.Control>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Alignment</Form.Label>
-                                    <Form.Select value={newCharacter.alignment.length > 0 ? newCharacter.alignment : ''} onChange={(e) => handleAlignment(e.target.value)} required>
-                                        <option value='none' hidden></option>
+                                    <Form.Select value={newCharacter.alignment} onChange={(e) => handleAlignment(e.target.value)} required>
+                                        <option value='none' hidden>Select an Alignment (Required)</option>
                                         <option>Lawful Good</option>
                                         <option>Lawful Neutral</option>
                                         <option>Lawful Evil</option>
@@ -564,14 +569,14 @@ const CharacterCreator = () => {
                                         <option>Chaotic Evil</option>
                                     </Form.Select>
                                     <Form.Label>Ideals</Form.Label>
-                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.ideals.length > 0 ? newCharacter.ideals : ''} placeholder={newCharacter.ideals.length === 0 ? 'Ideals' : ''} onChange={(e) => handleIdeals(e.target.value)} required></Form.Control>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.ideals} placeholder='Enter your characters ideals... (Optional)' onChange={(e) => handleIdeals(e.target.value)} required></Form.Control>
                                     <Form.Label>Bonds</Form.Label>
-                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.bonds.length > 0 ? newCharacter.bonds : ''} placeholder={newCharacter.bonds.length === 0 ? 'Bonds' : ''} onChange={(e) => handleBonds(e.target.value)} required></Form.Control>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.bonds} placeholder='Enter your characters bonds... (Optional)' onChange={(e) => handleBonds(e.target.value)} required></Form.Control>
                                     <Form.Label>Flaws</Form.Label>
-                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.flaws.length > 0 ? newCharacter.flaws : ''} placeholder={newCharacter.flaws.length === 0 ? 'Flaws' : ''} onChange={(e) => handleFlaws(e.target.value)} required></Form.Control>
+                                    <Form.Control type='text' as="textarea" rows={3} value={newCharacter.flaws} placeholder='Enter your characters flaws... (Optional)' onChange={(e) => handleFlaws(e.target.value)} required></Form.Control>
                                     <Form.Label>Background</Form.Label>
-                                    <Form.Select placeholder='Acolyte' required>
-                                        <option value='none' hidden></option>
+                                    <Form.Select value={newCharacter.background} onChange={(e) => handleBackground(e.target.value)} required>
+                                        <option value='none' hidden>Select a Background (Required)</option>
                                         <option>Acolyte</option>
                                     </Form.Select>
                                 </Form.Group>
@@ -651,14 +656,18 @@ const CharacterCreator = () => {
                             <>
                                 <Button type='button' onClick={() => { handleForwardsProgress() }}>Next</Button>
                             </>
-                        ) : <>
-                            <Button type='button' onClick={handleForwardsProgress}>Next</Button>
-                        </>
+                        ) : progress === 75 ? (
+                            <>
+                                <Button type='button' onClick={() => { handleForwardsProgress() }} disabled={newCharacter.name === '' || newCharacter.alignment === '' || newCharacter.background === ''}>Next</Button>
+                            </>
+                        ) :
+                            <>
+                                <Button type='button' onClick={handleForwardsProgress}>Next</Button>
+                            </>
                     }
 
                 </Modal.Footer>
             </Form>
-
 
             <RaceContext.Provider value={{ selectedRace, selectedSubrace, setSelectedSubrace }}>
                 <RaceDataContext.Provider value={{ raceData, setRaceData }}>
@@ -673,7 +682,7 @@ const CharacterCreator = () => {
 
 
         </div>
-    )
-}
+    );
+};
 
-export default CharacterCreator
+export default CharacterCreator;

@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react';
 import { ClassContext, ClassDataContext } from './CharacterCreator';
 
 
@@ -48,8 +48,8 @@ const ClassFetch = () => {
             }
         } catch (error) {
             console.error('Error while fetching class data:', error);
-        }
-    }
+        };
+    };
 
 
 
@@ -57,9 +57,9 @@ const ClassFetch = () => {
         if (selectedClass) {
             handleFetch();
         }
-    }, [selectedClass])
+    }, [selectedClass]);
 
-    return null
-}
+    return null;
+};
 
-export default ClassFetch
+export default ClassFetch;

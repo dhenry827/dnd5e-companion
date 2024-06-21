@@ -1,33 +1,33 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { useParams } from 'react-router-dom'
-import { CharacterDataContext } from '../../App'
-import '../../stylesheets/characterSheet.css'
-import StatBlock from './StatBlock.jsx'
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { CharacterDataContext } from '../../App';
+import '../../stylesheets/characterSheet.css';
+
 
 const CharacterInfo = () => {
-  const { characters, setCharacters } = useContext(CharacterDataContext)
+  const { characters, setCharacters } = useContext(CharacterDataContext);
 
-  const [charImg, setCharImg] = useState({ selectedFile: null, preview: null })
+  const [charImg, setCharImg] = useState({ selectedFile: null, preview: null });
 
   const onCharImgSelect = (e) => {
     const file = e.target.files[0]
     if (file) {
       const preview = URL.createObjectURL(file)
       setCharImg({ selectedFile: file, preview })
-    }
-  }
+    };
+  };
 
-  let { currentChar } = useParams()
-  currentChar = { ...characters[currentChar] }
+  let { currentChar } = useParams();
+  currentChar = { ...characters[currentChar] };
 
 const currentCharClasses = currentChar.classes.map((className, index) => (
   <p key={index}>{className.name} Lvl. {className.level}</p>
-))
+));
 
   useEffect(() => {
     console.log(characters)
     console.log('Current Character:', currentChar)
-  }, [])
+  }, []);
 
   return (
     <>
@@ -45,7 +45,7 @@ const currentCharClasses = currentChar.classes.map((className, index) => (
             </> :
             <>
               <input type='file' onChange={onCharImgSelect}></input>
-              <button onClick={() => { }}>Upload</button>
+              {/* <button onClick={() => { }}>Upload</button> */}
             </>
           }
         </div>
@@ -77,7 +77,7 @@ const currentCharClasses = currentChar.classes.map((className, index) => (
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CharacterInfo
+export default CharacterInfo;

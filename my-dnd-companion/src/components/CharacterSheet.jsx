@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { CharacterDataContext } from '../App'
-import StatBlock from './CharacterSheet/StatBlock'
-import CharacterInfo from './CharacterSheet/CharacterInfo'
+import React, { useState, useEffect, useContext } from 'react';
+import { CharacterDataContext } from '../App';
+import StatBlock from './CharacterSheet/StatBlock';
+import CharacterInfo from './CharacterSheet/CharacterInfo';
 
 
 const CharacterSheet = () => {
 
-    const { characters, setCharacters } = useContext(CharacterDataContext)
+    const { characters, setCharacters } = useContext(CharacterDataContext);
 
 
   return (
@@ -14,7 +14,7 @@ const CharacterSheet = () => {
       <CharacterInfo/>
       <StatBlock />
     </div>
-  )
-}
+  );
+};
 
-export default CharacterSheet
+export default CharacterSheet;

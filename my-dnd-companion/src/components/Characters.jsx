@@ -25,8 +25,8 @@ const Characters = () => {
     }
 
     useEffect(() => {
-        // Log the 'characters' array for debugging purposes
-        console.log(characters);
+        // Uncomment log for debugging purposes
+        // console.log(characters);
     },[characters]);
 
     return (
