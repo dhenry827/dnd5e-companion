@@ -45,7 +45,6 @@ const RaceFetch = () => {
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
-                        proficiencies: [{ name: "None" }],
                         languages: data.languages,
                         traits: [{ name: "None" }]
                     });
@@ -57,7 +56,6 @@ const RaceFetch = () => {
                         size: data.size,
                         speed: data.speed,
                         abilityBonuses: data.ability_bonuses,
-                        proficiencies: [{ name: "None" }],
                         languages: data.languages,
                         traits: data.traits
                     });

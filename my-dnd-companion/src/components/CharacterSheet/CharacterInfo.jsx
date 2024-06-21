@@ -5,7 +5,7 @@ import '../../stylesheets/characterSheet.css'
 import StatBlock from './StatBlock.jsx'
 
 const CharacterInfo = () => {
-  const { characters, setCharacter } = useContext(CharacterDataContext)
+  const { characters, setCharacters } = useContext(CharacterDataContext)
 
   const [charImg, setCharImg] = useState({ selectedFile: null, preview: null })
 

@@ -39,8 +39,8 @@ const CharacterCreator = () => {
         size: '',
         speed: 0,
         death_saves: {
-            successes: 0,
-            failures: 0
+            successes: [false, false, false],
+            failures: [false, false, false]
         },
         ability_scores: {
             str: 8,
@@ -62,7 +62,6 @@ const CharacterCreator = () => {
         flaws: '',
         background: '',
         languages: [],
-        traits: [],
         equipment: [],
     })
 
@@ -99,18 +98,6 @@ const CharacterCreator = () => {
 
 
     const handleRacesFetch = async () => {
-
-        // setRaceData({//sets raceData to a blank slate before fetching new data
-        //     name: '',
-        //     subrace: [],
-        //     size: '',
-        //     speed: 0,
-        //     abilityBonuses: [],
-        //     proficiencies: [],
-        //     languages: [],
-        //     traits: []
-        // })
-
         //line 40-46 attempts to fecth a list of races from the api.
         try {
             const response = await fetch(`https://www.dnd5eapi.co/api/races`, {
@@ -145,32 +132,56 @@ const CharacterCreator = () => {
     };
 
     const addRace = (raceData) => {
-        if(raceData.subrace){
-        setNewCharacter({
-            ...newCharacter,
-            race: {
-                name: raceData.name,
-                subrace_name: raceData.subrace_name
-            },
-            size: raceData.size,
-            speed: raceData.speed,
-            proficiencies: [raceData.proficiencies],
-            traits: raceData.traits,
-            
-        })} else {
+        if (raceData.proficiencies && raceData.traits) {
             setNewCharacter({
                 ...newCharacter,
                 race: {
                     name: raceData.name,
-                    subrace_name: ''
+                    subrace_name: raceData.subrace_name
                 },
                 size: raceData.size,
                 speed: raceData.speed,
                 proficiencies: [raceData.proficiencies],
+                traits: [raceData.traits],
+
+            })
+        } else if (!raceData.proficiencies && raceData.traits) {
+            setNewCharacter({
+                ...newCharacter,
+                race: {
+                    name: raceData.name,
+                    subrace_name: raceData.subrace_name
+                },
+                size: raceData.size,
+                speed: raceData.speed,
+                proficiencies: [],
                 traits: raceData.traits,
-                
-        })}
-        console.log(newCharacter)
+            })
+        } else if (raceData.proficiencies && !raceData.traits) {
+            setNewCharacter({
+                ...newCharacter,
+                race: {
+                    name: raceData.name,
+                    subrace_name: raceData.subrace_name
+                },
+                size: raceData.size,
+                speed: raceData.speed,
+                proficiencies: [raceData.proficiencies],
+                traits: [],
+            })
+        } else {
+            setNewCharacter({
+                ...newCharacter,
+                race: {
+                    name: raceData.name,
+                    subrace_name: raceData.subrace_name
+                },
+                size: raceData.size,
+                speed: raceData.speed,
+                proficiencies: [],
+                traits: [],
+            })
+        }
     }
 
     const [classOptions, setClassOptions] = useState([])
@@ -226,12 +237,25 @@ const CharacterCreator = () => {
                     name: classData.name,
                     level: 1,
                     hitDie: classData.hitDie,
-                    proficiencies: [...prevState.proficiencies, ...classData.proficiencies],
                     equipment: classData.startingEquipment,
                     // spellCastingAbility: classData.spellCastingAbility,
                 }
-            ]
+            ],
+            proficiencies: [
+                ...prevState.proficiencies, 
+                ...classData.proficiencies
+            ],
         }));
+        console.log(newCharacter)
+    };
+
+    const addClassProficiency = (skill) => {
+        setNewCharacter(prevState => ({
+            ...prevState,
+            proficiencies: [
+                ...prevState.proficiencies, skill
+            ]
+        }))
         console.log(newCharacter)
     }
 
@@ -354,9 +378,18 @@ const CharacterCreator = () => {
                                         <div>
                                             <h4>Proficiencies</h4>
                                             <ul>
-                                                {raceData.proficiencies.map((proficiency, index) => (
-                                                    <li key={index}>{proficiency.name}</li>
-                                                ))}
+                                                {raceData.proficiencies ?
+                                                    <>
+                                                        {
+                                                            raceData.proficiencies.map((proficiency, index) => (
+                                                                <li key={index}>{proficiency.name}</li>
+                                                            ))
+                                                        }
+                                                    </>
+                                                    :
+                                                    <li>None</li>
+                                                }
+
                                             </ul>
                                         </div>
 
@@ -437,6 +470,7 @@ const CharacterCreator = () => {
                                                                 key={index}
                                                                 type="checkbox"
                                                                 label={choice.item.name}
+                                                                onChange={() => { addClassProficiency(choice.item) }}
                                                             />
                                                         ))}
                                                     </>
@@ -536,7 +570,7 @@ const CharacterCreator = () => {
                                     <Form.Label>Flaws</Form.Label>
                                     <Form.Control type='text' as="textarea" rows={3} value={newCharacter.flaws.length > 0 ? newCharacter.flaws : ''} placeholder={newCharacter.flaws.length === 0 ? 'Flaws' : ''} onChange={(e) => handleFlaws(e.target.value)} required></Form.Control>
                                     <Form.Label>Background</Form.Label>
-                                    <Form.Select  placeholder='Acolyte' required>
+                                    <Form.Select placeholder='Acolyte' required>
                                         <option value='none' hidden></option>
                                         <option>Acolyte</option>
                                     </Form.Select>
@@ -550,9 +584,9 @@ const CharacterCreator = () => {
                                 <h3>Review Your Character</h3>
                                 <>
                                     <p><b>Name: </b>{newCharacter.name}</p>
-                                    <p><b>Race: </b>{newCharacter.race.subrace_name.length > 0 ? 
-                                    <>{newCharacter.race.subrace_name}</> :
-                                    <>{newCharacter.race.name}</>
+                                    <p><b>Race: </b>{newCharacter.race.subrace_name.length > 0 ?
+                                        <>{newCharacter.race.subrace_name}</> :
+                                        <>{newCharacter.race.name}</>
                                     }</p>
                                     <p><b>Class: </b>{newCharacter.classes[0].name} Lvl. {newCharacter.classes[0].level}</p>
                                     <p><b>Alignment: </b>{newCharacter.alignment}</p>
@@ -607,11 +641,11 @@ const CharacterCreator = () => {
                             </>
                         ) : progress === 0 ? (
                             <>
-                                <Button type='button' onClick={() => { addRace(raceData); handleForwardsProgress() }}>Next</Button>
+                                <Button type='button' onClick={() => { addRace(raceData); handleForwardsProgress() }} disabled={!selectedRace}>Next</Button>
                             </>
                         ) : progress === 25 ? (
                             <>
-                                <Button type='button' onClick={() => { addClass(classData); handleForwardsProgress() }}>Next</Button>
+                                <Button type='button' onClick={() => { addClass(classData); handleForwardsProgress() }} disabled={!selectedClass}>Next</Button>
                             </>
                         ) : progress === 50 ? (
                             <>
