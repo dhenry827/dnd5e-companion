@@ -7,12 +7,12 @@ import { AttributeDataContext } from './CharacterCreator';
 
 const PointBuy = () => {
 
-  const { newCharacter, setNewCharacter } = useContext(AttributeDataContext)
+  const { newCharacter, setNewCharacter } = useContext(AttributeDataContext);
 
-  const [pointTotal, setPointTotal] = useState(27)
+  const [pointTotal, setPointTotal] = useState(27);
 
   const calculateModifier = (value) => {
-    return Math.floor((value - 10) / 2)
+    return Math.floor((value - 10) / 2);
   }
 
   const handlePoints = (attrName, newValue) => {
@@ -22,7 +22,7 @@ const PointBuy = () => {
     console.log(`currentValue: ${currentValue}, New Value: ${parsedNewValue}`)
     let newPointTotal = pointTotal;
     if (parsedNewValue > currentValue) {
-      if (parsedNewValue >= 14 && parsedNewValue <= 15) {
+      if (parsedNewValue >= 14 && parsedNewValue <= 17) {
         newPointTotal -= 2;
       } else {
         newPointTotal -= 1;
@@ -44,35 +44,66 @@ const PointBuy = () => {
     }
   };
 
-  const handleReset = () => {
-    setNewCharacter({
-      ...newCharacter,
-      ability_scores: {
-        str: 8,
-        strMod: -1,
-        dex: 8,
-        dexMod: -1,
-        con: 8,
-        conMod: -1,
-        wis: 8,
-        wisMod: -1,
-        int: 8,
-        intMod: -1,
-        cha: 8,
-        chaMod: -1
-      }
-    })
-    setPointTotal(27)
+  const [reset, setReset] = useState(false);
 
+  const handleReset = () => {
+    setReset(true);
   }
 
-  // const saveAttr = () => {
-  //   setNewCharacter({...newCharacter, [newCharacter.ability_scores]: attributes} )
-  // }
+  useEffect(() => {
+    // Initalizes base ability scores
+    const baseAbilityScores = {
+      str: 8,
+      dex: 8,
+      con: 8,
+      wis: 8,
+      int: 8,
+      cha: 8,
+    };
+  
+    // Function to calculate ability scores with bonuses and modifiers
+    const calculateAbilityScores = () => {
+      
+      const abilityScoresWithBonuses = { ...baseAbilityScores };
+  
+      // Iterate over ability bonuses and update the corresponding ability score
+      newCharacter.ability_bonuses.forEach((bonusObj) => {
+        const { index } = bonusObj.ability_score;
+        const { bonus } = bonusObj;
+  
+        if (abilityScoresWithBonuses.hasOwnProperty(index)) {
+          abilityScoresWithBonuses[index] += bonus;
+        }
+      });
+  
+      // Calculates modifiers and add them to the ability scores object
+      const abilityScoresWithModifiers = {};
+      Object.keys(abilityScoresWithBonuses).forEach((key) => {
+        abilityScoresWithModifiers[key] = abilityScoresWithBonuses[key];
+        abilityScoresWithModifiers[`${key}Mod`] = calculateModifier(abilityScoresWithBonuses[key]);
+      });
+  
+      return abilityScoresWithModifiers;
+    };
+  
+    // Gets the calculated ability scores with bonuses and modifiers
+    const updatedAbilityScores = calculateAbilityScores();
+  
+    setNewCharacter({
+      ...newCharacter,
+      ability_scores: updatedAbilityScores
+    });
+  
+    // Resets the point total
+    setPointTotal(27);
+    
+    setReset(false);
+  },[reset])
 
   useEffect(() => {
-    console.log('ability scores:', newCharacter.ability_scores)
+    console.log('ability scores:', newCharacter.ability_scores);
   }, [])
+
   return (
     <div className='point-selector'>
       <Form.Group className="stat-Form">
@@ -80,12 +111,12 @@ const PointBuy = () => {
           <Row className='stat-group'>
             <div>
               <Form.Label>Strength</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.str} onChange={(e) => handlePoints('str', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.str} onChange={(e) => handlePoints('str', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.strMod})</p>
             </div>
             <div>
               <Form.Label>Dexterity</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.dex} onChange={(e) => handlePoints('dex', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.dex} onChange={(e) => handlePoints('dex', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.dexMod})</p>
             </div>
           </Row>
@@ -94,12 +125,12 @@ const PointBuy = () => {
           <Row className='stat-group'>
             <div>
               <Form.Label>Constitution</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.con} onChange={(e) => handlePoints('con', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.con} onChange={(e) => handlePoints('con', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.conMod})</p>
             </div>
             <div>
               <Form.Label>Wisdom</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.wis} onChange={(e) => handlePoints('wis', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.wis} onChange={(e) => handlePoints('wis', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.wisMod})</p>
             </div>
           </Row>
@@ -108,12 +139,12 @@ const PointBuy = () => {
           <Row className='stat-group'>
             <div>
               <Form.Label>Intelligence</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.int} onChange={(e) => handlePoints('int', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.int} onChange={(e) => handlePoints('int', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.intMod})</p>
             </div>
             <div>
               <Form.Label>Charisma</Form.Label>
-              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={15} value={newCharacter.ability_scores.cha} onChange={(e) => handlePoints('cha', e.target.value)}></Form.Control>
+              <Form.Control className="solo-stats" type="number" placeholder='8' min={8} max={17} value={newCharacter.ability_scores.cha} onChange={(e) => handlePoints('cha', e.target.value)}></Form.Control>
               <p>({newCharacter.ability_scores.chaMod})</p>
             </div>
           </Row>

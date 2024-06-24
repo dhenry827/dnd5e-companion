@@ -111,15 +111,25 @@ const RaceFetch = () => {
                     const data = await response.json();
                     console.log(data)
     
-                    setRaceData({//updates fields in raceData with subrace information
+                    if(raceData.proficiencies){
+                        setRaceData({//updates fields in raceData with subrace information
                         ...raceData,
                         subrace_name: data.name,
                         abilityBonuses: [...raceData.abilityBonuses, ...data.ability_bonuses],
                         proficiencies: [...raceData.proficiencies, ...data.starting_proficiencies],
                         traits: [...raceData.traits, ...data.racial_traits],
                         languages: [...raceData.languages, ...data.languages],
-                    },
-                    );
+                    });
+                } else {
+                    setRaceData({//updates fields in raceData with subrace information
+                        ...raceData,
+                        subrace_name: data.name,
+                        abilityBonuses: [...raceData.abilityBonuses, ...data.ability_bonuses],
+                        proficiencies: [...data.starting_proficiencies],
+                        traits: [...raceData.traits, ...data.racial_traits],
+                        languages: [...raceData.languages, ...data.languages],
+                    });
+                }
     
                 } else {
                     console.error('Failed to fetch subrace data');
@@ -130,12 +140,15 @@ const RaceFetch = () => {
         }
     };
 
+    // Ensures that race information is replaced when a new race is selected
     useEffect(() => {
         if (selectedRace) {
             handleFetchRace();
+            setSelectedSubrace('')
         }
     }, [selectedRace]);
 
+    // Ensures that subrace information is only fetched when a subrace is selected
     useEffect(() => {
         if (selectedSubrace) {
             handleFetchSubrace();

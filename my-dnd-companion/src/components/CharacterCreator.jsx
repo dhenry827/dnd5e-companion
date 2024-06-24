@@ -35,13 +35,14 @@ const CharacterCreator = () => {
             subrace_name: ''
         },
         classes: [],
-        exp: 0,
+        experience: 0,
         size: '',
         speed: 0,
         death_saves: {
             successes: [false, false, false],
             failures: [false, false, false]
         },
+        ability_bonuses: [],
         ability_scores: {
             str: 8,
             strMod: -1,
@@ -56,7 +57,6 @@ const CharacterCreator = () => {
             cha: 8,
             chaMod: -1
         },
-        ability_bonuses: [],
         ideals: '',
         bonds: '',
         flaws: '',
@@ -80,7 +80,6 @@ const CharacterCreator = () => {
         setProgress(progress - 25);
     };
 
-
     const [raceOptions, setRaceOptions] = useState([]) //state used to hold fetched race options for character building
     const [selectedRace, setSelectedRace] = useState(''); //state to hold the current race selected by the user. Is sent to the RaceFetch component to fetch data based on the users chosen race.
     const [selectedSubrace, setSelectedSubrace] = useState(''); //state to hold the current race selected by the user. Is sent to the RaceFetch component to fetch data based on the users chosen race.
@@ -94,7 +93,6 @@ const CharacterCreator = () => {
         languages: [],
         traits: []
     });
-
 
     const handleRacesFetch = async () => {
         //line 40-46 attempts to fecth a list of races from the api.
@@ -142,6 +140,7 @@ const CharacterCreator = () => {
                 speed: raceData.speed,
                 proficiencies: [raceData.proficiencies],
                 traits: [raceData.traits],
+                ability_bonuses: raceData.abilityBonuses,
 
             })
         } else if (!raceData.proficiencies && raceData.traits) {
@@ -155,6 +154,7 @@ const CharacterCreator = () => {
                 speed: raceData.speed,
                 proficiencies: [],
                 traits: raceData.traits,
+                ability_bonuses: raceData.abilityBonuses,
             })
         } else if (raceData.proficiencies && !raceData.traits) {
             setNewCharacter({
@@ -167,6 +167,7 @@ const CharacterCreator = () => {
                 speed: raceData.speed,
                 proficiencies: [raceData.proficiencies],
                 traits: [],
+                ability_bonuses: raceData.abilityBonuses,
             })
         } else {
             setNewCharacter({
@@ -179,6 +180,7 @@ const CharacterCreator = () => {
                 speed: raceData.speed,
                 proficiencies: [],
                 traits: [],
+                ability_bonuses: raceData.abilityBonuses,
             })
         };
     };
@@ -197,8 +199,6 @@ const CharacterCreator = () => {
         spellCastingAbility: '',
         spellCastingAbilityDesc: []
     });
-
-
 
     const handleClassesFetch = async () => {
 

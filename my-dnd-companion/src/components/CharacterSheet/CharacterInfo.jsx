@@ -20,9 +20,9 @@ const CharacterInfo = () => {
   let { currentChar } = useParams();
   currentChar = { ...characters[currentChar] };
 
-const currentCharClasses = currentChar.classes.map((className, index) => (
-  <p key={index}>{className.name} Lvl. {className.level}</p>
-));
+  const currentCharClasses = currentChar.classes.map((className, index) => (
+    <p key={index}>{className.name} Lvl. {className.level}</p>
+  ));
 
   useEffect(() => {
     console.log(characters)
@@ -35,10 +35,10 @@ const currentCharClasses = currentChar.classes.map((className, index) => (
         <div id='imageBlock'>
           Name: {currentChar.name}
           {currentChar.race.subrace_name.length > 0 ?
-                                <p>{currentChar.race.subrace_name}</p> :
-                                <p>{currentChar.race.name}</p>}
+            <p>{currentChar.race.subrace_name}</p> :
+            <p>{currentChar.race.name}</p>}
           {currentCharClasses}
-
+          <p>Experience: {currentChar.experience}</p>
           {charImg && charImg.preview ?
             <>
               <img src={charImg.preview} alt='Character' height='400px' width='200px'></img>
@@ -58,7 +58,7 @@ const currentCharClasses = currentChar.classes.map((className, index) => (
             <p><b>Background:</b> {currentChar.background}</p>
           </div>
           {/* <div className='info'>
-          <p>{currentChar.exp}</p>
+          
           <p>Experience Points</p>
         </div> */}
           <div className='info'>
